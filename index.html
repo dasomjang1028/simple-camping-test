@@ -810,6 +810,7 @@
             <div class="coupon-section">
                 <div class="coupon-main-title">더 완벽한 캠핑을 위한</div>
                 <div class="coupon-title">캠핑족 전용 혜택</div>
+                <p id="personal-offer">당신만을 위한 특별한 할인 혜택을 준비했습니다!</p>
                 
                 <div class="coupon-card" id="coupon-btn" onclick="getCoupon()">
                     <div class="coupon-content">
@@ -858,7 +859,7 @@
     <script>
         // Google Sheets 연동 설정
         const SHEETS_CONFIG = {
-            url: 'https://script.google.com/macros/s/AKfycbzcnlhuMk-6fPEvHkppfPEPbxpIKyPNkrNjHxXvwnQjjROP2cibvQR6M4zcbhBepDx2Dg/exec', // 실제 Google Apps Script 웹 앱 URL로 교체하세요
+            url: 'https://script.google.com/macros/s/AKfycbzcnlhuMk-6fPEvHkppfPEPbxpIKyPNkrNjHxXvwnQjjROP2cibvQR6M4zcbhBepDx2Dg/exec', // Google Apps Script 웹 앱 URL
             testSheet: '테스트결과',
             couponSheet: '쿠폰발급'
         };
@@ -1425,7 +1426,7 @@
         }
 
         // 전역 함수로 노출
-        window.getCampingTestData = getCampingTestData; 
+        window.getCampingTestData = getCampingTestData;
     </script>
 </body>
-</html> 
+</html>
