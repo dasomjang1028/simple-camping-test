@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 캠핑 스타일은?</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable.css");
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            background: linear-gradient(135deg, #F5F5DC 0%, #FDF5E6 50%, #FAF0E6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-feature-settings: "tnum";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            max-width: 480px;
+            width: 100%;
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            margin: 16px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h1 {
+            color: #2E7D32;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.4;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            color: #2E7D32;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.45;
+            letter-spacing: -0.01em;
+            margin-bottom: 24px;
+        }
+
+        .main-image {
+            font-size: 80px;
+            margin: 24px 0;
+        }
+
+        .subtitle {
+            color: #6B7280;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
+            letter-spacing: -0.005em;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.5;
+            letter-spacing: -0.005em;
+            cursor: pointer;
+            margin: 8px auto;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+            color: white;
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            border: 1px solid transparent;
+        }
+
+        .btn:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+        }
+
+        .btn-coupon {
+            background: #1565C0;
+            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.4);
+        }
+
+        .btn-coupon:hover {
+            background: #0D47A1;
+            box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
+        }
+
+        .btn-share {
+            background: #4CAF50;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-share:hover {
+            background: #2E7D32;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+        }
+
+        .btn-restart {
+            background: #B0BEC5;
+            box-shadow: 0 4px 15px rgba(176, 190, 197, 0.3);
+        }
+
+        .btn-restart:hover {
+            background: #90A4AE;
+            box-shadow: 0 4px 12px rgba(176, 190, 197, 0.25);
+        }
+
+        .btn-contact {
+            background: linear-gradient(135deg, #ff7043, #ff5722);
+            box-shadow: 0 4px 15px rgba(255, 112, 67, 0.3);
+        }
+
+        .btn-contact:hover {
+            background: linear-gradient(135deg, #ff5722, #e64a19);
+            box-shadow: 0 6px 20px rgba(255, 112, 67, 0.4);
+        }
+
+        .btn-contact:disabled {
+            background: #ccc;
+            box-shadow: none;
+        }
+
+        .progress-bar {
+            background: #F3F4F6;
+            height: 6px;
+            border-radius: 6px;
+            margin: 16px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .question-counter {
+            color: #9CA3AF;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .question {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1F2937;
+            line-height: 1.5;
+            letter-spacing: -0.01em;
+            margin-bottom: 24px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            font-size: 15px;
+            font-weight: 500;
+            line-height: 1.5;
+            letter-spacing: -0.005em;
+            color: #374151;
+        }
+
+        .option:hover {
+            border-color: #4CAF50;
+            background: #F0FDF4;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.12);
+        }
+
+        .result-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 32px;
+            margin: 24px 0;
+            text-align: center;
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4CAF50, #2E7D32);
+        }
+
+        .result-emoji {
+            font-size: 80px;
+            margin: 16px 0 24px 0;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .result-badge {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .result-title {
+            color: #1F2937;
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+            margin: 8px 0 16px 0;
+            background: linear-gradient(135deg, #2E7D32, #4CAF50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-subtitle {
+            color: #6B7280;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.5;
+            letter-spacing: -0.005em;
+            margin-bottom: 24px;
+        }
+
+        .result-description {
+            color: #4B5563;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.6;
+            letter-spacing: -0.005em;
+            margin-bottom: 24px;
+            text-align: left;
+            background: #F9FAFB;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #F3F4F6;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #EFF6FF 0%, #F0FDF4 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+            border: 1px solid #D1FAE5;
+        }
+
+        .stats-title {
+            color: #2E7D32;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+            margin-bottom: 16px;
+            text-align: center;
+            position: relative;
+        }
+
+        .stats-title::before {
+            content: "📊";
+            margin-right: 8px;
+            font-size: 20px;
+            display: inline-block;
+        }
+
+        .stats-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+        }
+
+        .stat-label {
+            color: #6B7280;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .stat-value {
+            color: #2E7D32;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #fff3e0 0%, #fce4ec 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid #ffccbc;
+        }
+
+        .contact-title {
+            color: #e65100;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .contact-desc {
+            color: #bf360c;
+            font-size: 1em;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ffccbc;
+            border-radius: 12px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-input:focus {
+            border-color: #ff7043;
+        }
+
+        .privacy-notice {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .privacy-checkbox {
+            margin-top: 2px;
+        }
+
+        .privacy-label {
+            line-height: 1.4;
+            cursor: pointer;
+        }
+
+        .privacy-link {
+            color: #ff7043;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .coupon-section {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 24px 0;
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .coupon-main-title {
+            color: #6B7280;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+            letter-spacing: -0.005em;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .coupon-title {
+            color: #1F2937;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.35;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .coupon-card {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .coupon-card:hover {
+            background: #F3F4F6;
+            border-color: #4CAF50;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.12);
+        }
+
+        .coupon-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .coupon-icon {
+            width: 48px;
+            height: 48px;
+            background: #4CAF50;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .coupon-text {
+            text-align: left;
+        }
+
+        .coupon-label {
+            color: #6B7280;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.4;
+            letter-spacing: -0.005em;
+            margin-bottom: 4px;
+        }
+
+        .coupon-value {
+            color: #1F2937;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+        }
+
+        .coupon-download {
+            color: #6B7280;
+            font-size: 20px;
+            transition: color 0.2s ease;
+        }
+
+        .coupon-card:hover .coupon-download {
+            color: #4CAF50;
+        }
+
+        .coupon-section p {
+            color: #6B7280;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: -0.005em;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2196F3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 24px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .button-group .btn {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            height: 40px;
+        }
+
+        .back-button {
+            background: #F3F4F6;
+            border: 1px solid #E5E7EB;
+            color: #6B7280;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .back-button:hover {
+            background: #E5E7EB;
+            border-color: #D1D5DB;
+            color: #4B5563;
+        }
+
+        .back-button:active {
+            transform: translateY(1px);
+        }
+
+        .question-counter {
+            flex: 1;
+            text-align: center;
+            color: #6B7280;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 40px;
+            height: 40px;
+        }
+
+        .question-spacer {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+                margin: 8px;
+                max-width: none;
+            }
+            h1 {
+                font-size: 28px;
+                line-height: 1.35;
+            }
+            h2 {
+                font-size: 20px;
+                line-height: 1.4;
+            }
+            .question {
+                font-size: 18px;
+                line-height: 1.5;
+            }
+            .subtitle {
+                font-size: 15px;
+                line-height: 1.6;
+                margin-bottom: 32px;
+            }
+            .main-image {
+                font-size: 64px;
+                margin: 16px 0;
+            }
+            .result-card {
+                padding: 24px;
+                margin: 16px 0;
+            }
+            .result-emoji {
+                font-size: 64px;
+            }
+            .result-title {
+                font-size: 24px;
+            }
+            .result-badge {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+            .option {
+                font-size: 14px;
+                padding: 14px;
+            }
+            .stats-section,
+            .coupon-section {
+                padding: 16px;
+                margin: 16px 0;
+            }
+            .result-description {
+                padding: 14px;
+            }
+            .footer {
+                margin-top: 20px;
+            }
+            .footer-content {
+                font-size: 12px;
+            }
+            .question-header {
+                height: 32px;
+                margin-bottom: 16px;
+            }
+            .back-button {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+                line-height: 32px;
+            }
+            .question-counter {
+                height: 32px;
+                font-size: 13px;
+                line-height: 32px;
+            }
+            .question-spacer {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        .footer {
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .footer-content {
+            color: #9CA3AF;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: -0.005em;
+        }
+
+        .share-container {
+            background: linear-gradient(135deg, #F5F5DC 0%, #FDF5E6 50%, #FAF0E6 100%);
+            padding: 32px;
+            border-radius: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .share-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .share-title {
+            color: #2E7D32;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .share-subtitle {
+            color: #6B7280;
+            font-size: 14px;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 메인 화면 -->
+        <div id="main" class="section active">
+            <h1>나의 캠핑 스타일은?</h1>
+            <div class="main-image">🏕️</div>
+            <p class="subtitle">
+                당신만의 특별한 캠핑 스타일을 발견해보세요!<br>
+                14개의 간단한 질문으로 알아보는 나만의 캠핑 성향
+            </p>
+            <button class="btn btn-primary" onclick="startTest()">테스트 시작하기</button>
+        </div>
+
+        <!-- 질문 화면 -->
+        <div id="question" class="section">
+            <div class="question-header">
+                <button class="back-button" id="back-btn" onclick="goBack()">
+                    <span>←</span>
+                </button>
+                <div class="question-counter">
+                    <span id="current-q">1</span> / 14
+                </div>
+                <div class="question-spacer"></div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <h2 class="question" id="question-text"></h2>
+            <div class="options" id="options"></div>
+        </div>
+
+        <!-- 결과 화면 -->
+        <div id="result" class="section">
+            <h2>당신의 캠핑 스타일은</h2>
+            
+            <div class="result-card">
+                <div class="result-badge">CAMPING STYLE</div>
+                <div class="result-emoji" id="result-emoji"></div>
+                <div class="result-title" id="result-title"></div>
+                <div class="result-subtitle" id="result-subtitle"></div>
+                <div class="result-description" id="result-description"></div>
+        </div>
+
+            <div class="stats-section">
+                <div class="stats-title">캠핑 성향 분석</div>
+                <div class="stats-content">
+                    <div class="stat-item">
+                        <span class="stat-label">캠핑 빈도:</span>
+                        <span class="stat-value" id="frequency-stat"></span>
+            </div>
+                    <div class="stat-item">
+                        <span class="stat-label">주요 동반자:</span>
+                        <span class="stat-value" id="companion-stat"></span>
+        </div>
+                    <div class="stat-item">
+                        <span class="stat-label">같은 유형:</span>
+                        <span class="stat-value" id="percentage-stat">전체 응답자의 약 6.25%</span>
+            </div>
+            </div>
+        </div>
+        
+            <div class="coupon-section">
+                <div class="coupon-main-title">더 완벽한 캠핑을 위한</div>
+                <div class="coupon-title">캠핑족 전용 혜택</div>
+                
+                <div class="coupon-card" id="coupon-btn" onclick="getCoupon()">
+                    <div class="coupon-content">
+                        <div class="coupon-icon">🏕️</div>
+                        <div class="coupon-text">
+                            <div class="coupon-label">캠핑 장비 할인</div>
+                            <div class="coupon-value">최대 34,000원 쿠폰할인</div>
+            </div>
+                    </div>
+                    <div class="coupon-download">↓</div>
+        </div>
+
+                <div id="coupon-result"></div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-share" onclick="shareResult()">공유하기</button>
+                <button class="btn btn-restart" onclick="restartTest()">다시 하기</button>
+        </div>
+
+            <footer class="footer">
+                <div class="footer-content">
+                    © 2025 snowline. All Rights Reserved.
+            </div>
+            </footer>
+            </div>
+        </div>
+
+    <!-- 공유용 숨겨진 컨테이너 -->
+    <div id="share-capture" style="position: absolute; left: -9999px; top: -9999px;">
+        <div class="share-container">
+            <div class="share-header">
+                <div class="share-title">나의 캠핑 스타일</div>
+                <div class="share-subtitle">심리테스트 결과</div>
+            </div>
+            <div class="result-card" id="share-result-card">
+                <div class="result-badge">CAMPING STYLE</div>
+                <div class="result-emoji" id="share-result-emoji"></div>
+                <div class="result-title" id="share-result-title"></div>
+                <div class="result-subtitle" id="share-result-subtitle"></div>
+                <div class="result-description" id="share-result-description"></div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        // Google Sheets 연동 설정
+        const SHEETS_CONFIG = {
+            url: 'https://script.google.com/macros/s/YOUR_GOOGLE_APPS_SCRIPT_DEPLOYMENT_ID/exec', // 실제 Google Apps Script 웹 앱 URL로 교체하세요
+            testSheet: '테스트결과',
+            couponSheet: '쿠폰발급'
+        };
+
+        const questions = [
+            {
+                q: "캠핑을 계획할 때 나는...",
+                a: [
+                    { text: "미리 상세한 일정을 짜고 준비물을 체크리스트로 만든다", type: "J" },
+                    { text: "대략적인 계획만 세우고 즉흥적으로 즐긴다", type: "P" }
+                ]
+            },
+            {
+                q: "캠핑장에서 새로운 사람들을 만나면...",
+                a: [
+                    { text: "먼저 다가가서 인사하고 대화를 시작한다", type: "E" },
+                    { text: "상대방이 먼저 말을 걸어오기를 기다린다", type: "I" }
+                ]
+            },
+            {
+                q: "캠핑 요리를 할 때 나는...",
+                a: [
+                    { text: "레시피를 정확히 따라하며 계량도 정확히 한다", type: "S" },
+                    { text: "대충 감으로 하면서 창의적으로 변형한다", type: "N" }
+                ]
+            },
+            {
+                q: "1년에 몇 번 정도 캠핑을 하시나요?",
+                a: [
+                    { text: "아직 캠핑 경험이 없거나 1회 미만", type: "FREQUENCY", value: "0회" },
+                    { text: "1~2회 정도", type: "FREQUENCY", value: "1-2회" },
+                    { text: "3~5회 정도", type: "FREQUENCY", value: "3-5회" },
+                    { text: "6회 이상", type: "FREQUENCY", value: "6회이상" }
+                ]
+            },
+            {
+                q: "캠핑 장비를 선택할 때 가장 중요한 것은...",
+                a: [
+                    { text: "기능성과 실용성, 가성비", type: "T" },
+                    { text: "디자인과 느낌, 캠핑 분위기", type: "F" }
+                ]
+            },
+            {
+                q: "텐트를 칠 때 나는...",
+                a: [
+                    { text: "설명서를 꼼꼼히 읽고 순서대로 설치한다", type: "J" },
+                    { text: "일단 해보면서 감으로 설치한다", type: "P" }
+                ]
+            },
+            {
+                q: "주로 누구와 캠핑을 가시나요?",
+                a: [
+                    { text: "혼자서 자유롭게", type: "COMPANION", value: "혼자" },
+                    { text: "연인과 로맨틱하게", type: "COMPANION", value: "연인" },
+                    { text: "가족과 함께", type: "COMPANION", value: "가족" },
+                    { text: "친구들과 즐겁게", type: "COMPANION", value: "친구" }
+                ]
+            },
+            {
+                q: "캠핑에서 가장 좋은 시간은...",
+                a: [
+                    { text: "모든 사람들과 함께 모닥불 앞에서 이야기하는 시간", type: "E" },
+                    { text: "혼자서 자연을 바라보며 생각에 잠기는 시간", type: "I" }
+                ]
+            },
+            {
+                q: "캠핑지를 선택할 때 나는...",
+                a: [
+                    { text: "시설이 잘 갖춰진 검증된 캠핑장을 선택한다", type: "S" },
+                    { text: "아무도 가보지 않은 숨겨진 장소를 찾아간다", type: "N" }
+                ]
+            },
+            {
+                q: "캠핑에서 텐트가 찢어지거나 장비가 고장났을 때 나는...",
+                a: [
+                    { text: "논리적으로 원인을 분석하고 해결책을 찾는다", type: "T" },
+                    { text: "함께 온 사람들을 배려하며 차분하게 대안을 모색한다", type: "F" }
+                ]
+            },
+            {
+                q: "캠핑 중 갑작스런 비가 와서 계획이 틀어졌을 때 나는...",
+                a: [
+                    { text: "상황을 분석해서 최적의 대처 방안을 찾는다", type: "T" },
+                    { text: "동행한 사람들이 실망하지 않도록 분위기를 챙긴다", type: "F" }
+                ]
+            },
+            {
+                q: "캠핑 일정을 짤 때 나는...",
+                a: [
+                    { text: "시간별로 상세한 스케줄을 만든다", type: "J" },
+                    { text: "그때그때 하고 싶은 것을 한다", type: "P" }
+                ]
+            },
+            {
+                q: "캠핑에서 에너지를 얻는 순간은...",
+                a: [
+                    { text: "다른 캠퍼들과 활발하게 소통할 때", type: "E" },
+                    { text: "조용한 자연 속에서 혼자만의 시간을 가질 때", type: "I" }
+                ]
+            },
+            {
+                q: "캠핑 장비를 정리할 때 나는...",
+                a: [
+                    { text: "사용한 순서대로 체계적으로 정리한다", type: "S" },
+                    { text: "대략적으로 분류해서 넣는다", type: "N" }
+                ]
+            },
+            {
+                q: "캠핑 후기를 남길 때 나는...",
+                a: [
+                    { text: "객관적인 정보와 팁을 상세히 기록한다", type: "T" },
+                    { text: "감정과 느낌을 중심으로 따뜻하게 작성한다", type: "F" }
+                ]
+            }
+        ];
+
+        const results = {
+            'ESTJ': { title: '완벽주의 리더 캠퍼', subtitle: '모든 것을 완벽하게 준비하는 캠핑 대장', emoji: '👑', description: '당신은 캠핑의 모든 것을 계획하고 실행하는 타고난 리더입니다. 체크리스트를 만들어 빠짐없이 준비하고, 팀원들의 안전과 편의를 책임집니다.' },
+            'ESTP': { title: '즉흥적 모험가', subtitle: '지금 이 순간을 즐기는 액션 캠퍼', emoji: '🔥', description: '당신은 계획보다는 즉흥성을 중시하는 모험가입니다. 새로운 장소와 액티비티에 도전하기를 좋아하며, 캠핑장에서 가장 활동적입니다.' },
+            'ESFJ': { title: '따뜻한 케어테이커', subtitle: '모두를 챙기는 마음 따뜻한 캠퍼', emoji: '🤗', description: '당신은 캠핑에서 모든 사람들이 편안하고 즐겁게 지낼 수 있도록 세심하게 배려합니다. 맛있는 캠핑 요리를 준비하고 팀원들을 돌봅니다.' },
+            'ESFP': { title: '자유로운 분위기 메이커', subtitle: '캠핑장을 축제로 만드는 즐거운 캠퍼', emoji: '🎪', description: '당신은 캠핑을 하나의 큰 축제로 만드는 재능이 있습니다. 자유롭고 유연한 성격으로 어떤 상황에도 잘 적응합니다.' },
+            'ENTJ': { title: '전략적 캠핑 마스터', subtitle: '효율성을 추구하는 캠핑 전략가', emoji: '⚡', description: '당신은 캠핑을 하나의 프로젝트로 접근하는 전략가입니다. 목표를 설정하고 최적의 방법으로 달성하려 합니다.' },
+            'ENTP': { title: '창의적 실험가', subtitle: '새로운 캠핑 스타일을 개척하는 혁신가', emoji: '💡', description: '당신은 기존의 캠핑 방식에 얽매이지 않고 새로운 방법을 시도하는 혁신가입니다.' },
+            'ENFJ': { title: '영감을 주는 가이드', subtitle: '모두에게 영감을 주는 캠핑 멘토', emoji: '🌟', description: '당신은 캠핑을 통해 사람들에게 영감과 깨달음을 주는 멘토입니다. 자연과의 교감을 중시합니다.' },
+            'ENFP': { title: '열정적 탐험가', subtitle: '무한한 가능성을 꿈꾸는 자유로운 영혼', emoji: '🦋', description: '당신은 캠핑에서 무한한 가능성을 발견하는 자유로운 영혼입니다. 새로운 사람들과의 만남을 소중히 여깁니다.' },
+            'ISTJ': { title: '신중한 전통주의자', subtitle: '검증된 방법으로 안전한 캠핑을 즐기는 신뢰할 수 있는 캠퍼', emoji: '🛡️', description: '당신은 검증된 방법과 전통적인 캠핑 스타일을 선호합니다. 철저한 준비와 계획으로 안전한 캠핑을 만듭니다.' },
+            'ISTP': { title: '실용적 기술자', subtitle: '뛰어난 손기술로 모든 것을 해결하는 캠핑 장인', emoji: '🔧', description: '당신은 실용적이고 기술적인 접근으로 캠핑의 달인이 됩니다. 장비를 능숙하게 다룹니다.' },
+            'ISFJ': { title: '조용한 수호자', subtitle: '묵묵히 모든 것을 챙기는 든든한 지원군', emoji: '🕊️', description: '당신은 다른 사람들이 편안하게 캠핑할 수 있도록 조용히 뒷바라지하는 수호자입니다.' },
+            'ISFP': { title: '감성적 예술가', subtitle: '자연과 하나 되는 순수한 마음의 캠퍼', emoji: '🎨', description: '당신은 자연의 아름다움을 온몸으로 느끼며 캠핑하는 예술가입니다. 조용한 자연 속에서 내면의 평화를 찾습니다.' },
+            'INTJ': { title: '완벽주의 설계자', subtitle: '이상적인 캠핑을 설계하는 전략적 사고가', emoji: '🏗️', description: '당신은 완벽한 캠핑 시스템을 설계하고 구현하는 설계자입니다. 효율성과 품질을 모두 추구합니다.' },
+            'INTP': { title: '분석적 탐구자', subtitle: '캠핑의 원리를 탐구하는 사색가', emoji: '🔬', description: '당신은 캠핑의 모든 요소를 분석하고 이해하려는 탐구자입니다. 논리적이고 체계적인 접근을 합니다.' },
+            'INFJ': { title: '신비로운 몽상가', subtitle: '자연과 깊은 교감을 나누는 영적 탐험가', emoji: '🌙', description: '당신은 캠핑을 통해 자연과 깊은 영적 교감을 나누는 몽상가입니다. 혼자만의 시간을 소중히 여깁니다.' },
+            'INFP': { title: '이상주의 시인', subtitle: '자연에서 영감을 받는 순수한 이상주의자', emoji: '📝', description: '당신은 자연에서 영감을 받아 내면의 이상을 추구하는 시인입니다. 개인적인 가치와 의미를 중시합니다.' }
+        };
+
+        let currentQuestion = 0;
+        let answers = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+        let userResponses = [];
+        let answerHistory = []; // 뒤로가기를 위한 답변 히스토리
+        let testStartTime = null;
+        let additionalData = {
+            frequency: '',
+            companion: ''
+        };
+
+
+
+        // Google Sheets에 데이터 전송
+        async function sendToGoogleSheets(data, sheetType = 'test') {
+            try {
+                const response = await fetch(SHEETS_CONFIG.url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: sheetType === 'test' ? 'save_test_result' : 'issue_coupon',
+                        ...data
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    console.log('Google Sheets에 데이터 저장 완료:', result.message);
+                    return result;
+                } else {
+                    throw new Error(result.error || '알 수 없는 오류');
+                }
+            } catch (error) {
+                console.error('Google Sheets 저장 실패:', error);
+                return false;
+            }
+        }
+
+        async function updatePercentageStats(resultType) {
+            try {
+                // 통계 조회 API 호출
+                const apiUrl = `${SHEETS_CONFIG.url}?action=get_stats`;
+                console.log('통계 조회 API 호출:', apiUrl);
+                
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP 오류: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('통계 조회 응답:', result);
+                
+                if (result.status === 'success' && result.data) {
+                    const stats = result.data;
+                    const currentTypeStats = stats.mbti_stats[resultType];
+                    
+                    if (currentTypeStats && stats.total_responses > 0) {
+                        const percentage = currentTypeStats.percentage;
+                        const count = currentTypeStats.count;
+                        
+                        document.getElementById('percentage-stat').textContent = 
+                            `전체 응답자의 약 ${percentage}% (${count}/${stats.total_responses}명)`;
+                    } else {
+                        document.getElementById('percentage-stat').textContent = 
+                            '전체 응답자의 약 0% (첫 번째 응답자!)';
+                    }
+                } else {
+                    throw new Error('통계 데이터를 가져올 수 없습니다.');
+                }
+                
+            } catch (error) {
+                console.error('통계 조회 실패:', error);
+                // 실패 시 기본값 표시
+                document.getElementById('percentage-stat').textContent = '전체 응답자의 약 6.25%';
+            }
+        }
+
+        function startTest() {
+            testStartTime = new Date();
+            currentQuestion = 0;
+            answers = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+            userResponses = [];
+            answerHistory = [];
+            additionalData = { frequency: '', companion: '' };
+            
+            document.getElementById('main').classList.remove('active');
+            document.getElementById('question').classList.add('active');
+            showQuestion();
+        }
+
+        function goBack() {
+            if (currentQuestion === 0) {
+                // 첫 번째 질문에서는 메인으로 돌아가기
+                document.getElementById('question').classList.remove('active');
+                document.getElementById('main').classList.add('active');
+                return;
+            }
+            
+            // 이전 질문으로 돌아가기
+            currentQuestion--;
+            
+            // 이전 답변 복원
+            if (answerHistory.length > 0) {
+                const prevState = answerHistory.pop();
+                answers = { ...prevState.answers };
+                additionalData = { ...prevState.additionalData };
+                userResponses.pop();
+            }
+            
+            showQuestion();
+        }
+
+
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('current-q').textContent = currentQuestion + 1;
+            document.getElementById('progress').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+            document.getElementById('question-text').textContent = question.q;
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            question.a.forEach((answer) => {
+                const option = document.createElement('div');
+                option.className = 'option';
+                option.textContent = answer.text;
+                option.onclick = () => selectAnswer(answer.type, answer.text, answer.value);
+                optionsDiv.appendChild(option);
+            });
+        }
+
+        function selectAnswer(type, text, value) {
+            // 현재 상태를 히스토리에 저장 (뒤로가기를 위해)
+            answerHistory.push({
+                answers: { ...answers },
+                additionalData: { ...additionalData }
+            });
+            
+            if (type === 'FREQUENCY') {
+                additionalData.frequency = value;
+            } else if (type === 'COMPANION') {
+                additionalData.companion = value;
+            } else {
+                answers[type]++;
+            }
+            
+            userResponses.push({
+                questionNumber: currentQuestion + 1,
+                question: questions[currentQuestion].q,
+                answer: text,
+                type: type,
+                value: value || null,
+                timestamp: new Date().toISOString()
+            });
+            
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                setTimeout(showQuestion, 300);
+            } else {
+                setTimeout(showResult, 300);
+            }
+        }
+
+        function calculateResult() {
+            let result = '';
+            result += answers.E > answers.I ? 'E' : 'I';
+            result += answers.S > answers.N ? 'S' : 'N';
+            result += answers.T > answers.F ? 'T' : 'F';
+            result += answers.J > answers.P ? 'J' : 'P';
+            return result;
+        }
+
+        async function showResult() {
+            const resultType = calculateResult();
+            const result = results[resultType];
+            const testEndTime = new Date();
+            const testDuration = Math.round((testEndTime - testStartTime) / 1000);
+            
+            document.getElementById('question').classList.remove('active');
+            document.getElementById('result').classList.add('active');
+            
+            document.getElementById('result-emoji').textContent = result.emoji;
+            document.getElementById('result-title').textContent = result.title;
+            document.getElementById('result-subtitle').textContent = result.subtitle;
+            document.getElementById('result-description').textContent = result.description;
+            
+            // 통계 정보 표시
+            document.getElementById('frequency-stat').textContent = additionalData.frequency || '미응답';
+            document.getElementById('companion-stat').textContent = additionalData.companion || '미응답';
+            
+            // 실시간 통계 조회 및 표시
+            await updatePercentageStats(resultType);
+            
+            setPersonalizedCouponMessage(result.title);
+            
+            // Google Sheets에 테스트 결과 저장
+            const testData = {
+                timestamp: testStartTime.toISOString(),
+                result_type: resultType,
+                result_title: result.title,
+                responses: userResponses,
+                ip_address: '',
+                user_agent: navigator.userAgent,
+                referrer: document.referrer || ''
+            };
+            
+            await sendToGoogleSheets(testData, 'test');
+        }
+
+        function setPersonalizedCouponMessage(resultTitle) {
+            const personalOfferElement = document.getElementById('personal-offer');
+            
+            const personalMessages = {
+                '완벽주의 리더 캠퍼': '리더님만을 위한 프리미엄 캠핑 장비 20% 할인, 놓치면 후회할 기회예요',
+                '즉흥적 모험가': '모험가 스타일에 딱 맞는 캠핑 장비를 20% 할인가에 만나보세요',
+                '따뜻한 케어테이커': '가족 모두가 행복한 캠핑을 위한 특별 할인, 지금이 기회예요',
+                '자유로운 분위기 메이커': '자유로운 당신의 캠핑 라이프를 완성할 장비를 특가로 준비했어요',
+                '전략적 캠핑 마스터': '전략가답게 똑똑한 선택! 최고 효율의 캠핑 장비를 20% 할인받으세요',
+                '창의적 실험가': '새로운 캠핑을 꿈꾸는 당신께 혁신적인 장비 할인 기회를 드려요',
+                '영감을 주는 가이드': '멘토 스타일 캠퍼를 위한 프리미엄 장비, 특별가로 만나보세요',
+                '열정적 탐험가': '열정 넘치는 캠퍼를 위한 맞춤 장비 할인, 지금 바로 확인하세요',
+                '신중한 전통주의자': '믿을 수 있는 브랜드의 검증된 캠핑 장비를 20% 할인받으세요',
+                '실용적 기술자': '기술자 스타일에 딱 맞는 고성능 캠핑 장비, 특가로 준비했어요',
+                '조용한 수호자': '편안하고 안전한 캠핑을 위한 필수 장비를 특별가에 드려요',
+                '감성적 예술가': '감성 캠퍼를 위한 아름다운 캠핑 장비, 20% 할인으로 만나보세요',
+                '완벽주의 설계자': '완벽을 추구하는 당신을 위한 최고급 캠핑 장비를 할인가에',
+                '분석적 탐구자': '똑똑한 선택! 분석력 있는 캠퍼를 위한 합리적 가격의 장비예요',
+                '신비로운 몽상가': '자연과 하나되는 특별한 캠핑을 위한 장비를 할인가에 드려요',
+                '이상주의 시인': '이상적인 캠핑 라이프를 위한 감성 장비, 특별 할인으로 준비했어요'
+            };
+            
+            const message = personalMessages[resultTitle] || '당신 같은 캠퍼를 위한 특별한 20% 할인, 지금 바로 확인해보세요';
+            personalOfferElement.textContent = message;
+        }
+
+        async function getCoupon() {
+            const couponBtn = document.getElementById('coupon-btn');
+            const couponResult = document.getElementById('coupon-result');
+            
+            couponBtn.disabled = true;
+            couponBtn.innerHTML = '쿠폰 발급 중<span class="loading"></span>';
+            
+            try {
+                const resultType = calculateResult();
+                
+                // Google Sheets에 쿠폰 발급 요청
+                const couponData = {
+                    result_type: resultType,
+                    ip_address: '',
+                    user_agent: navigator.userAgent
+                };
+                
+                const result = await sendToGoogleSheets(couponData, 'coupon');
+                
+                if (result && result.success) {
+                    const couponCode = result.data?.coupon_code || `CAMPING${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
+                    
+                    couponResult.innerHTML = `
+                        <div class="alert alert-success">
+                            🎉 쿠폰이 발급되었습니다!<br>
+                            <strong>쿠폰코드: ${couponCode}</strong><br>
+                            <small>* 캠핑용품 쇼핑몰에서 사용하세요</small>
+                        </div>
+                    `;
+                    couponBtn.style.display = 'none';
+                } else {
+                    throw new Error(result?.message || '쿠폰 발급 실패');
+                }
+                
+            } catch (error) {
+                console.error('쿠폰 발급 실패:', error);
+                couponResult.innerHTML = `
+                    <div class="alert alert-error">
+                        쿠폰 발급에 실패했습니다. 다시 시도해주세요.<br>
+                        <small>오류: ${error.message}</small>
+                    </div>
+                `;
+                couponBtn.disabled = false;
+                couponBtn.innerHTML = `
+                    <div class="coupon-content">
+                        <div class="coupon-icon">🏕️</div>
+                        <div class="coupon-text">
+                            <div class="coupon-label">캠핑 장비 할인</div>
+                            <div class="coupon-value">최대 34,000원 쿠폰할인</div>
+                        </div>
+                    </div>
+                    <div class="coupon-download">↓</div>
+                `;
+            }
+        }
+
+        async function shareResult() {
+            const resultType = calculateResult();
+            const result = results[resultType];
+            const shareText = `나의 캠핑 스타일: ${result.title}\n${result.subtitle}\n\n테스트 해보기: ${window.location.href}`;
+            
+            try {
+                // 결과 영역을 이미지로 변환
+                const resultElement = document.getElementById('result');
+                const canvas = await html2canvas(resultElement, {
+                    backgroundColor: '#FFFFFF',
+                    scale: 2, // 고화질을 위해 스케일 업
+                    useCORS: true,
+                    allowTaint: true,
+                    width: resultElement.offsetWidth,
+                    height: resultElement.offsetHeight
+                });
+                
+                // 캔버스를 Blob으로 변환
+                canvas.toBlob(async (blob) => {
+                    const imageFile = new File([blob], 'camping-style-result.png', { type: 'image/png' });
+                    
+                    // Web Share API를 지원하는 경우 (주로 모바일)
+                    if (navigator.share && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
+                        try {
+                            await navigator.share({
+                                title: '나의 캠핑 스타일 테스트',
+                                text: shareText,
+                                files: [imageFile]
+                            });
+                        } catch (shareError) {
+                            console.log('Share cancelled or failed:', shareError);
+                            // 공유가 취소되었거나 실패한 경우 이미지만 다운로드
+                            downloadImage(canvas, 'camping-style-result.png');
+                        }
+            } else {
+                        // Web Share API를 지원하지 않는 경우 (주로 데스크톱)
+                        // 이미지 다운로드와 텍스트 복사 제공
+                        const userChoice = confirm('이미지를 다운로드하시겠습니까?\n\n확인: 이미지 다운로드\n취소: 텍스트만 복사');
+                        
+                        if (userChoice) {
+                            downloadImage(canvas, 'camping-style-result.png');
+                        } else {
+                            if (navigator.clipboard) {
+                                navigator.clipboard.writeText(shareText);
+                                alert('결과가 클립보드에 복사되었습니다!');
+                            } else {
+                                alert('공유하기: ' + shareText);
+                            }
+                        }
+                    }
+                }, 'image/png');
+                
+            } catch (error) {
+                console.error('이미지 생성 실패:', error);
+                // 이미지 생성 실패 시 텍스트만 공유
+                if (navigator.share) {
+                    navigator.share({
+                        title: '나의 캠핑 스타일 테스트',
+                        text: shareText
+                    });
+                } else {
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(shareText);
+                        alert('결과가 클립보드에 복사되었습니다!');
+                    } else {
+                        alert('공유하기: ' + shareText);
+                    }
+                }
+            }
+        }
+        
+        function downloadImage(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // 다운로드 후 알림
+            setTimeout(() => {
+                alert('이미지가 다운로드되었습니다!\n결과를 SNS에 공유해보세요 🎉');
+            }, 500);
+        }
+
+        function restartTest() {
+            currentQuestion = 0;
+            answers = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+            userResponses = [];
+            testStartTime = null;
+            additionalData = { frequency: '', companion: '' };
+            
+            document.getElementById('result').classList.remove('active');
+            document.getElementById('main').classList.add('active');
+            
+            // 쿠폰 섹션 초기화
+            document.getElementById('coupon-btn').disabled = false;
+            document.getElementById('coupon-btn').innerHTML = `
+                <div class="coupon-content">
+                    <div class="coupon-icon">🏕️</div>
+                    <div class="coupon-text">
+                        <div class="coupon-label">캠핑 장비 할인</div>
+                        <div class="coupon-value">최대 34,000원 쿠폰할인</div>
+                    </div>
+                </div>
+                <div class="coupon-download">↓</div>
+            `;
+            document.getElementById('coupon-btn').style.display = 'block';
+            document.getElementById('coupon-result').innerHTML = '';
+        }
+
+        // 페이지 로드 완료
+        window.addEventListener('load', () => {
+            console.log('MBTI 캠핑 스타일 테스트 준비 완료');
+        });
+
+        // 개발자용 데이터 조회 함수
+        function getCampingTestData() {
+            return {
+                currentTest: {
+                    question: currentQuestion,
+                    answers: answers,
+                    responses: userResponses,
+                    additionalData: additionalData
+                },
+                sheetsConfig: SHEETS_CONFIG
+            };
+        }
+
+        // 전역 함수로 노출
+        window.getCampingTestData = getCampingTestData;
+    </script>
+</body>
+</html>
