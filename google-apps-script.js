@@ -59,6 +59,21 @@ function doGet(e) {
 }
 
 /**
+ * OPTIONS 요청 처리 - CORS preflight 요청 대응
+ */
+function doOptions(e) {
+  return ContentService
+    .createTextOutput('')
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Max-Age': '86400'
+    });
+}
+
+/**
  * POST 요청 처리 - 테스트 결과 저장 및 쿠폰 발급
  */
 function doPost(e) {
@@ -390,12 +405,18 @@ function getClientIP() {
 }
 
 /**
- * JSON 응답 생성
+ * JSON 응답 생성 (CORS 헤더 포함)
  */
 function createJsonResponse(data) {
   return ContentService
     .createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Max-Age': '86400'
+    });
 }
 
 /**
