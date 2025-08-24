@@ -859,7 +859,7 @@
     <script>
         // Google Sheets 연동 설정
         const SHEETS_CONFIG = {
-            url: 'https://script.google.com/macros/s/AKfycbzcnlhuMk-6fPEvHkppfPEPbxpIKyPNkrNjHxXvwnQjjROP2cibvQR6M4zcbhBepDx2Dg/exec', // Google Apps Script 웹 앱 URL
+            url: 'https://script.google.com/macros/s/AKfycbyj2voZ6roLp_K2vCjHwtnW9-qCpQ-wUCCGoU46kKwxqQU1mipQ_F5QevrAqVkRxdLY/exec', // Google Apps Script 웹 앱 URL
             testSheet: '테스트결과',
             couponSheet: '쿠폰발급'
         };
@@ -1010,18 +1010,33 @@
         // Google Sheets에 데이터 전송
         async function sendToGoogleSheets(data, sheetType = 'test') {
             try {
+                console.log('Google Sheets 요청 시작:', sheetType, data);
+                
+                const requestData = {
+                    action: sheetType === 'test' ? 'save_test_result' : 'issue_coupon',
+                    ...data
+                };
+                
+                console.log('전송할 데이터:', requestData);
+                
                 const response = await fetch(SHEETS_CONFIG.url, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        action: sheetType === 'test' ? 'save_test_result' : 'issue_coupon',
-                        ...data
-                    })
+                    body: JSON.stringify(requestData),
+                    mode: 'cors',
+                    cache: 'no-cache'
                 });
 
+                console.log('응답 상태:', response.status, response.statusText);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP 오류: ${response.status} ${response.statusText}`);
+                }
+
                 const result = await response.json();
+                console.log('Google Sheets 응답:', result);
                 
                 if (result.success) {
                     console.log('Google Sheets에 데이터 저장 완료:', result.message);
@@ -1031,7 +1046,17 @@
                 }
             } catch (error) {
                 console.error('Google Sheets 저장 실패:', error);
-                return false;
+                console.error('오류 상세:', {
+                    message: error.message,
+                    stack: error.stack,
+                    url: SHEETS_CONFIG.url,
+                    sheetType: sheetType
+                });
+                return { 
+                    success: false, 
+                    error: error.message,
+                    details: error.toString()
+                };
             }
         }
 
@@ -1211,7 +1236,11 @@
                 referrer: document.referrer || ''
             };
             
-            await sendToGoogleSheets(testData, 'test');
+            const saveResult = await sendToGoogleSheets(testData, 'test');
+            if (!saveResult || !saveResult.success) {
+                console.error('테스트 결과 저장 실패:', saveResult);
+                // 저장 실패해도 결과는 보여줌
+            }
         }
 
         function setPersonalizedCouponMessage(resultTitle) {
@@ -1258,6 +1287,7 @@
                 };
                 
                 const result = await sendToGoogleSheets(couponData, 'coupon');
+                console.log('쿠폰 발급 결과:', result);
                 
                 if (result && result.success) {
                     const couponCode = result.data?.coupon_code || `CAMPING${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
@@ -1271,7 +1301,8 @@
                     `;
                     couponBtn.style.display = 'none';
                 } else {
-                    throw new Error(result?.message || '쿠폰 발급 실패');
+                    const errorMsg = result?.error || result?.message || '쿠폰 발급 실패';
+                    throw new Error(errorMsg);
                 }
                 
             } catch (error) {
@@ -1407,9 +1438,45 @@
             document.getElementById('coupon-result').innerHTML = '';
         }
 
+        // Google Apps Script 연결 테스트
+        async function testConnection() {
+            try {
+                console.log('Google Apps Script 연결 테스트 시작...');
+                const response = await fetch(`${SHEETS_CONFIG.url}?action=ping`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP 오류: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('연결 테스트 성공:', result);
+                return true;
+            } catch (error) {
+                console.error('Google Apps Script 연결 실패:', error);
+                console.error('연결 URL:', SHEETS_CONFIG.url);
+                console.error('해결 방법:');
+                console.error('1. Google Apps Script 웹 앱이 배포되었는지 확인');
+                console.error('2. 웹 앱 권한이 "모든 사용자"로 설정되었는지 확인');
+                console.error('3. SHEETS_CONFIG.url이 정확한지 확인');
+                return false;
+            }
+        }
+
         // 페이지 로드 완료
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
             console.log('MBTI 캠핑 스타일 테스트 준비 완료');
+            
+            // Google Apps Script 연결 테스트
+            const isConnected = await testConnection();
+            if (!isConnected) {
+                console.warn('⚠️ Google Apps Script 연결에 문제가 있습니다. 테스트 결과가 저장되지 않을 수 있습니다.');
+            } else {
+                console.log('✅ Google Apps Script 연결 정상');
+            }
         });
 
         // 개발자용 데이터 조회 함수
