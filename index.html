@@ -859,7 +859,7 @@
     <script>
         // Google Sheets 연동 설정
         const SHEETS_CONFIG = {
-            url: 'https://script.google.com/macros/s/AKfycbyj2voZ6roLp_K2vCjHwtnW9-qCpQ-wUCCGoU46kKwxqQU1mipQ_F5QevrAqVkRxdLY/exec', // Google Apps Script 웹 앱 URL
+            url: 'https://script.google.com/macros/s/AKfycbxNUVfEmQoGo68lAWVjRgLn-Aj10b1f4xpzsZBOi9jXQwVqPHmdC557w_-MVaQWJ0qi/exec', // Google Apps Script 웹 앱 URL
             testSheet: '테스트결과',
             couponSheet: '쿠폰발급'
         };
@@ -1143,7 +1143,20 @@
 
 
         function showQuestion() {
+            // 방어 코드: 질문 인덱스 유효성 검사
+            if (currentQuestion >= questions.length || currentQuestion < 0) {
+                console.error('잘못된 질문 인덱스:', currentQuestion, '전체 질문 수:', questions.length);
+                showResult(); // 바로 결과 화면으로
+                return;
+            }
+            
             const question = questions[currentQuestion];
+            if (!question || !question.q) {
+                console.error('질문 데이터가 없습니다:', currentQuestion, question);
+                showResult(); // 바로 결과 화면으로
+                return;
+            }
+            
             document.getElementById('current-q').textContent = currentQuestion + 1;
             document.getElementById('progress').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
             document.getElementById('question-text').textContent = question.q;
@@ -1175,9 +1188,16 @@
                 answers[type]++;
             }
             
+            // 방어 코드: 질문 데이터 유효성 검사
+            const currentQuestionData = questions[currentQuestion];
+            if (!currentQuestionData || !currentQuestionData.q) {
+                console.error('selectAnswer: 질문 데이터가 없습니다:', currentQuestion, currentQuestionData);
+                return;
+            }
+            
             userResponses.push({
                 questionNumber: currentQuestion + 1,
-                question: questions[currentQuestion].q,
+                question: currentQuestionData.q,
                 answer: text,
                 type: type,
                 value: value || null,
@@ -1494,6 +1514,111 @@
 
         // 전역 함수로 노출
         window.getCampingTestData = getCampingTestData;
+        
+        // 🔧 디버깅 도구들
+        window.debugTools = {
+            // 연결 테스트
+            async testConnection() {
+                console.log('🔍 연결 테스트 시작...');
+                console.log('현재 URL:', SHEETS_CONFIG.url);
+                
+                try {
+                    const response = await fetch(`${SHEETS_CONFIG.url}?action=ping`, {
+                        method: 'GET',
+                        mode: 'cors'
+                    });
+                    
+                    console.log('응답 상태:', response.status);
+                    console.log('응답 헤더:', [...response.headers.entries()]);
+                    
+                    const text = await response.text();
+                    console.log('응답 내용 (원본):', text);
+                    
+                    try {
+                        const json = JSON.parse(text);
+                        console.log('응답 내용 (JSON):', json);
+                        return { success: true, data: json };
+                    } catch (parseError) {
+                        console.error('JSON 파싱 실패:', parseError);
+                        return { success: false, error: 'JSON 파싱 실패', response: text };
+                    }
+                } catch (error) {
+                    console.error('연결 실패:', error);
+                    return { success: false, error: error.message };
+                }
+            },
+            
+            // 테스트 데이터 전송
+            async testSend() {
+                console.log('🧪 테스트 데이터 전송 시작...');
+                const testData = {
+                    action: 'save_test_result',
+                    timestamp: new Date().toISOString(),
+                    result_type: 'TEST',
+                    result_title: '테스트용',
+                    responses: [
+                        {
+                            questionNumber: 1,
+                            question: "테스트 질문",
+                            answer: "테스트 답변",
+                            type: "T",
+                            value: null,
+                            timestamp: new Date().toISOString()
+                        }
+                    ],
+                    ip_address: '',
+                    user_agent: navigator.userAgent,
+                    referrer: document.referrer || ''
+                };
+                
+                return await sendToGoogleSheets(testData, 'test');
+            },
+            
+            // 전체 진단
+            async diagnose() {
+                console.log('🏥 전체 시스템 진단 시작...');
+                console.log('=====================================');
+                
+                // 1. 기본 설정 확인
+                console.log('1️⃣ 기본 설정 확인:');
+                console.log('- URL:', SHEETS_CONFIG.url);
+                console.log('- URL 길이:', SHEETS_CONFIG.url.length);
+                console.log('- URL 형식 검증:', SHEETS_CONFIG.url.includes('script.google.com'));
+                
+                // 2. 연결 테스트
+                console.log('\n2️⃣ 연결 테스트:');
+                const connectionResult = await this.testConnection();
+                console.log('연결 결과:', connectionResult);
+                
+                // 3. 권한 테스트 (HEAD 요청으로)
+                console.log('\n3️⃣ 권한 테스트:');
+                try {
+                    const headResponse = await fetch(SHEETS_CONFIG.url, { method: 'HEAD', mode: 'cors' });
+                    console.log('HEAD 요청 상태:', headResponse.status);
+                } catch (headError) {
+                    console.log('HEAD 요청 실패:', headError.message);
+                }
+                
+                console.log('=====================================');
+                console.log('💡 해결 방법:');
+                
+                if (!connectionResult.success) {
+                    if (connectionResult.error.includes('CORS')) {
+                        console.log('❌ CORS 오류 → Google Apps Script 배포 시 "모든 사용자" 권한 확인');
+                    } else if (connectionResult.error.includes('404')) {
+                        console.log('❌ 404 오류 → 웹 앱 URL이 잘못되었거나 배포가 안됨');
+                    } else if (connectionResult.response && connectionResult.response.includes('Google')) {
+                        console.log('❌ Google 로그인 페이지 → 권한 설정 문제');
+                    } else {
+                        console.log('❌ 기타 오류:', connectionResult.error);
+                    }
+                } else {
+                    console.log('✅ 연결 성공! 다른 문제일 수 있습니다.');
+                }
+                
+                return connectionResult;
+            }
+        };
     </script>
 </body>
 </html>
