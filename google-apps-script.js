@@ -5,7 +5,8 @@
  */
 
 // 스프레드시트 ID (실제 스프레드시트 생성 후 URL에서 복사해서 여기에 입력)
-const SPREADSHEET_ID = 'YOUR_GOOGLE_SPREADSHEET_ID_HERE'; // 실제 스프레드시트 ID로 교체하세요
+// 예: https://docs.google.com/spreadsheets/d/1ABC123...XYZ/edit 에서 1ABC123...XYZ 부분
+const SPREADSHEET_ID = 'YOUR_GOOGLE_SPREADSHEET_ID_HERE'; // ⚠️ 반드시 실제 스프레드시트 ID로 교체하세요!
 const TEST_SHEET_NAME = '테스트결과';
 const COUPON_SHEET_NAME = '쿠폰발급';
 
@@ -118,6 +119,11 @@ function doPost(e) {
  */
 function saveTestResult(data) {
   try {
+    // 스프레드시트 ID 확인
+    if (!SPREADSHEET_ID || SPREADSHEET_ID === 'YOUR_GOOGLE_SPREADSHEET_ID_HERE') {
+      throw new Error('스프레드시트 ID가 설정되지 않았습니다. Google Apps Script에서 SPREADSHEET_ID를 실제 값으로 교체하세요.');
+    }
+    
     // 스프레드시트 열기
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     let sheet = spreadsheet.getSheetByName(TEST_SHEET_NAME);
@@ -174,6 +180,11 @@ function saveTestResult(data) {
  */
 function issueCoupon(data) {
   try {
+    // 스프레드시트 ID 확인
+    if (!SPREADSHEET_ID || SPREADSHEET_ID === 'YOUR_GOOGLE_SPREADSHEET_ID_HERE') {
+      throw new Error('스프레드시트 ID가 설정되지 않았습니다. Google Apps Script에서 SPREADSHEET_ID를 실제 값으로 교체하세요.');
+    }
+    
     // 스프레드시트 열기
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     let sheet = spreadsheet.getSheetByName(COUPON_SHEET_NAME);
@@ -479,6 +490,11 @@ function testCouponFunction() {
  */
 function getTestStatistics() {
   try {
+    // 스프레드시트 ID 확인
+    if (!SPREADSHEET_ID || SPREADSHEET_ID === 'YOUR_GOOGLE_SPREADSHEET_ID_HERE') {
+      throw new Error('스프레드시트 ID가 설정되지 않았습니다. Google Apps Script에서 SPREADSHEET_ID를 실제 값으로 교체하세요.');
+    }
+    
     // 스프레드시트 열기
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sheet = spreadsheet.getSheetByName(TEST_SHEET_NAME);
